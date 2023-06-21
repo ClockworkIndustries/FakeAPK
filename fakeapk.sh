@@ -1,12 +1,9 @@
 #!/bin/bash
 # Made by kxtz#8161
+# Official Product of ClockworkIndustries
 # Licenced under the MIT Licence
-# Script is linked at https://github.com/kxtzownsu/fakeapk
+# Script is linked at https://github.com/ClockworkIndustries/fakeapk
 # FakeAPK Build 1
-
-
-# Getting command variables, example: bash fakeapk.sh 0 0
-vb=$1
 
 
 # Checking if Root
@@ -18,7 +15,7 @@ if [ "$EUID" -ne 0 ]; then
 if [ "$1" = "1" ]; then
   echo "You are running the script with Verbose Mode! This will print every single action done."
 else
-  echo "FakeAPK.Verbose.Disabled.Message"
+  echo ""
 fi
 
 traps() {
@@ -56,6 +53,9 @@ disable_fakeapk() {
   
   echo "--- Patching crossystem ---"
   echo "Writing to crossystem"
+  if [ "$1" = "1" ]; then
+    echo 'running command: `sed -i "s/\(cros_debug=\).*/\10/" /user/bin/crossystem` to disable cros_debug flag'
+  fi
   sed -i "s/\(cros_debug=\).*/\10/" /usr/bin/crossystem
   echo "Done! Press enter to restart your chromebook automatically then install your APKs of choice!"
   read disablefakeapk
@@ -65,8 +65,12 @@ disable_fakeapk() {
 enable_fakeapk() {
   
   echo "--- Patching crossystem ---"
-  sed -i "s/\(cros_debug=\).*/\11/" /usr/bin/crossystem
   echo "Writing to crossystem"
+  if [ "$1" = "1" ]; then
+    echo 'running command: `sed -i "s/\(cros_debug=\).*/\11/" /user/bin/crossystem` to enable cros_debug flag'
+  fi
+  sed -i "s/\(cros_debug=\).*/\11/" /usr/bin/crossystem
+
   echo "Done! Press enter to restart your chromebook automatically then install your APKs of choice!"
   read enablefakeapk
   reboot
